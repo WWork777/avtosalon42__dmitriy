@@ -97,7 +97,7 @@ const Categories: React.FC = () => {
             <div className="relative rounded-2xl overflow-hidden group">
               <div className="relative w-full h-[200px] sm:h-[260px] md:h-[320px] lg:h-[386px]">
                 <Image
-                  src="/images/hero/IMG_0002-min.JPG"
+                  src="/images/hero/shourum.JPG"
                   alt="Шоурум"
                   fill
                   className="object-cover"
@@ -116,7 +116,7 @@ const Categories: React.FC = () => {
             <div className="relative rounded-2xl overflow-hidden group">
               <div className="relative w-full h-[200px] sm:h-[260px] md:h-[320px] lg:h-[386px]">
                 <Image
-                  src="/images/hero/IMG_0002-min.JPG"
+                  src="/images/hero/facad.JPG"
                   alt="Фасад и территория"
                   fill
                   className="object-cover"
@@ -135,7 +135,7 @@ const Categories: React.FC = () => {
             <div className="relative rounded-2xl overflow-hidden group">
               <div className="relative w-full h-[180px] sm:h-[220px] md:h-[300px] lg:h-[386px]">
                 <Image
-                  src="/images/hero/IMG_0002-min.JPG"
+                  src="/images/hero/OFIC.JPG"
                   alt="Офисная часть"
                   fill
                   className="object-cover"
@@ -154,7 +154,7 @@ const Categories: React.FC = () => {
             <div className="relative rounded-2xl overflow-hidden group">
               <div className="relative w-full h-[180px] sm:h-[220px] md:h-[300px] lg:h-[386px]">
                 <Image
-                  src="/images/hero/IMG_0002-min.JPG"
+                  src="/images/hero/shoproom.JPG"
                   alt="Склад"
                   fill
                   className="object-cover"
