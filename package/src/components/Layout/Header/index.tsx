@@ -13,8 +13,8 @@ const anchorLinks: Anchor[] = [
   { href: '#services', label: 'Фотогалерея' },
   { href: '#features', label: 'Характеристики' },
   // { href: '#plans',    label: 'Планировки' }, // ← если блока нет — закомментируй строку
-  { href: '#terms',    label: 'Условия' },
-  { href: '#contact',  label: 'Контакты' },
+  { href: '#terms', label: 'Условия' },
+  { href: '#contact', label: 'Контакты' },
 ];
 
 const HEADER_OFFSET = 84; // поправка под высоту шапки при скролле
@@ -76,41 +76,44 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`fixed h-24 py-1 z-50 w-full bg-transparent transition-all duration-300 lg:px-0 px-4 ${
-        sticky ? 'top-3' : 'top-0'
-      }`}
+      className={`fixed h-24 py-1 z-50 w-full bg-transparent transition-all duration-300 lg:px-0 px-4 ${sticky ? 'top-3' : 'top-0'
+        }`}
     >
       <nav
-        className={`container mx-auto max-w-8xl flex items-center justify-between py-4 duration-300 ${
-          sticky ? 'shadow-lg bg-white dark:bg-dark rounded-full top-5 px-4' : 'shadow-none top-0'
-        }`}
+        className={`container mx-auto max-w-8xl relative flex items-center justify-between py-4 duration-300 ${sticky ? 'shadow-lg bg-white dark:bg-dark rounded-full top-5 px-4' : 'shadow-none top-0'
+          }`}
       >
-        {/* ЛОГО */}
-        <Link href="/" className="shrink-0" aria-label="На главную">
-          {/* светлый логотип для тёмного фона */}
+        {/* ЛОГО (один контейнер, две версии поверх друг друга) */}
+        <Link href="/" aria-label="На главную"
+          className="shrink-0 relative w-[150px] h-[68px]">
+          {/* светлая версия для тёмного фона / top-of-hero */}
           <Image
             src="/images/header/logo.svg"
             alt="Homely"
-            width={150}
-            height={68}
+            fill
             unoptimized
-            className={`${isHomepage ? (sticky ? 'hidden' : 'block') : 'hidden'} dark:block`}
+            className={`
+      object-contain
+      ${isHomepage ? (sticky ? 'hidden' : 'block') : 'hidden'}
+      dark:block
+    `}
           />
-        </Link>
-        {/* тёмный логотип для светлого фона */}
-        <Link href="/" className="shrink-0" aria-label="На главную">
+          {/* тёмная версия для светлого фона / sticky */}
           <Image
             src="/images/header/dark-logo.svg"
             alt="Homely"
-            width={150}
-            height={68}
+            fill
             unoptimized
-            className={`${isHomepage ? (sticky ? 'block' : 'hidden') : 'block'} dark:hidden`}
+            className={`
+      object-contain
+      ${isHomepage ? (sticky ? 'block' : 'hidden') : 'block'}
+      dark:hidden
+    `}
           />
         </Link>
 
         {/* ЦЕНТР — МЕНЮ (desktop) */}
-        <ul className="hidden md:flex items-center gap-6 lg:gap-8">
+        <ul className="hidden md:flex items-center gap-6 lg:gap-8 absolute left-1/2 -translate-x-1/2">
           {anchorLinks.map((l) => (
             <li key={l.href}>
               <a
@@ -158,11 +161,10 @@ const Header: React.FC = () => {
           {/* бургер — только на mobile */}
           <button
             onClick={() => setNavbarOpen(true)}
-            className={`flex md:hidden items-center gap-3 p-2 rounded-full border ${
-              textClass.includes('text-white')
-                ? 'border-white'
-                : 'border-dark dark:border-white'
-            }`}
+            className={`flex md:hidden items-center gap-3 p-2 rounded-full border ${textClass.includes('text-white')
+              ? 'border-white'
+              : 'border-dark dark:border-white'
+              }`}
             aria-label="Открыть меню"
           >
             <Icon icon="ph:list" width={24} height={24} className={textClass} />
@@ -176,9 +178,8 @@ const Header: React.FC = () => {
       {/* МОБИЛЬНОЕ БОКОВОЕ МЕНЮ */}
       <div
         ref={sideMenuRef}
-        className={`fixed top-0 right-0 md:hidden h-full w-full bg-dark shadow-lg transition-transform duration-300 max-w-2xl ${
-          navbarOpen ? 'translate-x-0' : 'translate-x-full'
-        } z-50 px-6 sm:px-10 overflow-auto no-scrollbar`}
+        className={`fixed top-0 right-0 md:hidden h-full w-full bg-dark shadow-lg transition-transform duration-300 max-w-2xl ${navbarOpen ? 'translate-x-0' : 'translate-x-full'
+          } z-50 px-6 sm:px-10 overflow-auto no-scrollbar`}
       >
         <div className="flex items-center justify-between py-5">
           <Link href="/" onClick={() => setNavbarOpen(false)}>
