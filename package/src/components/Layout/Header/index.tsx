@@ -7,13 +7,17 @@ import { useTheme } from 'next-themes';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-const anchorLinks = [
-  { href: '#gallery',  label: 'Фотогалерея' },
+type Anchor = { href: `#${string}`; label: string };
+
+const anchorLinks: Anchor[] = [
+  { href: '#services', label: 'Фотогалерея' },
   { href: '#features', label: 'Характеристики' },
-  { href: '#plans',    label: 'Планировки' },
+  // { href: '#plans',    label: 'Планировки' }, // ← если блока нет — закомментируй строку
   { href: '#terms',    label: 'Условия' },
   { href: '#contact',  label: 'Контакты' },
 ];
+
+const HEADER_OFFSET = 84; // поправка под высоту шапки при скролле
 
 const Header: React.FC = () => {
   const [sticky, setSticky] = useState(false);
@@ -43,21 +47,47 @@ const Header: React.FC = () => {
     };
   }, [handleScroll]);
 
-  const textClass = isHomepage
-    ? sticky
-      ? 'text-dark dark:text-white'
-      : 'text-white'
-    : 'text-dark dark:text-white';
+  // Плавный скролл к якорю с учётом высоты шапки
+  const scrollToId = (id: string) => {
+    const el = document.querySelector(id) as HTMLElement | null;
+    if (!el) return;
+    const top =
+      el.getBoundingClientRect().top + window.pageYOffset - HEADER_OFFSET;
+    window.scrollTo({ top, behavior: 'smooth' });
+  };
+
+  const onAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (!isHomepage) {
+      // если не на главной — ведём на /#id
+      e.preventDefault();
+      window.location.href = `/${href}`;
+      return;
+    }
+    // на главной — плавный скролл
+    e.preventDefault();
+    scrollToId(href);
+    setNavbarOpen(false);
+  };
+
+  const textClass =
+    isHomepage ? (sticky ? 'text-dark dark:text-white' : 'text-white') : 'text-dark dark:text-white';
 
   const navClass = `text-sm lg:text-base ${textClass} hover:text-primary transition-colors`;
 
   return (
-    <header className={`fixed h-24 py-1 z-50 w-full bg-transparent transition-all duration-300 lg:px-0 px-4 ${sticky ? 'top-3' : 'top-0'}`}>
-      <nav className={`container mx-auto max-w-8xl flex items-center justify-between py-4 duration-300 ${sticky ? 'shadow-lg bg-white dark:bg-dark rounded-full top-5 px-4' : 'shadow-none top-0'}`}>
-
+    <header
+      className={`fixed h-24 py-1 z-50 w-full bg-transparent transition-all duration-300 lg:px-0 px-4 ${
+        sticky ? 'top-3' : 'top-0'
+      }`}
+    >
+      <nav
+        className={`container mx-auto max-w-8xl flex items-center justify-between py-4 duration-300 ${
+          sticky ? 'shadow-lg bg-white dark:bg-dark rounded-full top-5 px-4' : 'shadow-none top-0'
+        }`}
+      >
         {/* ЛОГО */}
-        <Link href="/" className="shrink-0">
-          {/* светлый вариант логотипа */}
+        <Link href="/" className="shrink-0" aria-label="На главную">
+          {/* светлый логотип для тёмного фона */}
           <Image
             src="/images/header/logo.svg"
             alt="Homely"
@@ -66,7 +96,9 @@ const Header: React.FC = () => {
             unoptimized
             className={`${isHomepage ? (sticky ? 'hidden' : 'block') : 'hidden'} dark:block`}
           />
-          {/* тёмный вариант логотипа */}
+        </Link>
+        {/* тёмный логотип для светлого фона */}
+        <Link href="/" className="shrink-0" aria-label="На главную">
           <Image
             src="/images/header/dark-logo.svg"
             alt="Homely"
@@ -77,11 +109,15 @@ const Header: React.FC = () => {
           />
         </Link>
 
-        {/* ЦЕНТР — МЕНЮ (только desktop) */}
+        {/* ЦЕНТР — МЕНЮ (desktop) */}
         <ul className="hidden md:flex items-center gap-6 lg:gap-8">
           {anchorLinks.map((l) => (
             <li key={l.href}>
-              <a href={l.href} className={navClass} onClick={() => setNavbarOpen(false)}>
+              <a
+                href={l.href}
+                className={navClass}
+                onClick={(e) => onAnchorClick(e, l.href)}
+              >
                 {l.label}
               </a>
             </li>
@@ -96,12 +132,25 @@ const Header: React.FC = () => {
             aria-label="Переключить тему"
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           >
-            <Icon icon="solar:sun-bold" width={32} height={32} className={`dark:hidden block ${textClass}`} />
-            <Icon icon="solar:moon-bold" width={32} height={32} className="dark:block hidden text-white" />
+            <Icon
+              icon="solar:sun-bold"
+              width={32}
+              height={32}
+              className={`dark:hidden block ${textClass}`}
+            />
+            <Icon
+              icon="solar:moon-bold"
+              width={32}
+              height={32}
+              className="dark:block hidden text-white"
+            />
           </button>
 
-          {/* телефон */}
-          <Link href="tel:79039073334" className={`text-base ${textClass} hidden sm:flex items-center gap-2`}>
+          {/* телефон (скрываем на xs) */}
+          <Link
+            href="tel:79039073334"
+            className={`text-base ${textClass} hidden sm:flex items-center gap-2`}
+          >
             <Icon icon="ph:phone-bold" width={22} height={22} />
             <span className="whitespace-nowrap">+7 (903) 907-33-34</span>
           </Link>
@@ -109,10 +158,14 @@ const Header: React.FC = () => {
           {/* бургер — только на mobile */}
           <button
             onClick={() => setNavbarOpen(true)}
-            className={`flex md:hidden items-center gap-3 p-2 rounded-full font-semibold hover:cursor-pointer border ${textClass === 'text-white' ? 'border-white' : 'border-dark dark:border-white'}`}
+            className={`flex md:hidden items-center gap-3 p-2 rounded-full border ${
+              textClass.includes('text-white')
+                ? 'border-white'
+                : 'border-dark dark:border-white'
+            }`}
             aria-label="Открыть меню"
           >
-            <Icon icon="ph:list" width={24} height={24} />
+            <Icon icon="ph:list" width={24} height={24} className={textClass} />
           </button>
         </div>
       </nav>
@@ -123,11 +176,19 @@ const Header: React.FC = () => {
       {/* МОБИЛЬНОЕ БОКОВОЕ МЕНЮ */}
       <div
         ref={sideMenuRef}
-        className={`fixed top-0 right-0 md:hidden h-full w-full bg-dark shadow-lg transition-transform duration-300 max-w-2xl ${navbarOpen ? 'translate-x-0' : 'translate-x-full'} z-50 px-6 sm:px-10 overflow-auto no-scrollbar`}
+        className={`fixed top-0 right-0 md:hidden h-full w-full bg-dark shadow-lg transition-transform duration-300 max-w-2xl ${
+          navbarOpen ? 'translate-x-0' : 'translate-x-full'
+        } z-50 px-6 sm:px-10 overflow-auto no-scrollbar`}
       >
         <div className="flex items-center justify-between py-5">
           <Link href="/" onClick={() => setNavbarOpen(false)}>
-            <Image src="/images/header/dark-logo.svg" alt="logo" width={120} height={52} unoptimized />
+            <Image
+              src="/images/header/dark-logo.svg"
+              alt="logo"
+              width={120}
+              height={52}
+              unoptimized
+            />
           </Link>
           <button
             onClick={() => setNavbarOpen(false)}
@@ -139,12 +200,12 @@ const Header: React.FC = () => {
         </div>
 
         <nav className="mt-2 mb-8">
-          <ul className="flex flex-col gap-4">
+          <ul className="flex flex-col gap-2">
             {anchorLinks.map((item) => (
               <li key={item.href}>
                 <a
                   href={item.href}
-                  onClick={() => setNavbarOpen(false)}
+                  onClick={(e) => onAnchorClick(e, item.href)}
                   className="block text-white text-lg py-3 border-b border-white/10 hover:text-primary"
                 >
                   {item.label}
@@ -160,7 +221,8 @@ const Header: React.FC = () => {
             <Icon icon="ph:phone-bold" width={22} height={22} />
             +7 (903) 907-33-34
           </Link>
-          {/* Переключатель темы дубль — по желанию можно убрать */}
+
+          {/* Переключатель темы (в сайдбаре) */}
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             className="mt-2 inline-flex items-center gap-2 text-white/90 hover:text-primary"
@@ -176,4 +238,3 @@ const Header: React.FC = () => {
 };
 
 export default Header;
-

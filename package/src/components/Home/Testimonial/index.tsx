@@ -13,7 +13,9 @@ const bullets = [
 const ContactCta: React.FC = () => {
     return (
         // подтягиваем блок к предыдущему, чтобы они смотрелись едино
-        <section className="relative overflow-hidden pt-0 -mt-4 sm:-mt-6">
+        <section id="contact"
+            className="relative overflow-hidden pt-0 -mt-4 sm:-mt-6"
+            aria-label="Контакты">
             <div className="container max-w-8xl mx-auto px-5 2xl:px-0">
                 <div className="grid lg:grid-cols-12 gap-10 items-start">
                     {/* Левый столбец — новый текст без повторов */}

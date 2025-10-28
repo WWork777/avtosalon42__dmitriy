@@ -11,13 +11,40 @@ export default function Home() {
   return (
     <main>
       <Hero />
-      <Services />
-      <Properties />
-      {/* <FeaturedProperty /> */}
+
+      {/* ФОТО/ГАЛЕРЕЯ */}
+      <section id="services">
+        <Services />
+      </section>
+
+      {/* ХАРАКТЕРИСТИКИ */}
+      <section id="features">
+        <Properties />
+      </section>
+
+      {/* ПЛАНИРОВКИ (если вернёшь блок, оберни точно так же) */}
+      {/* <section id="plans">
+        <FeaturedProperty />
+      </section> */}
+
+      {/* Блок "Отзыв/контактный CTA" — без якоря, если не нужно */}
       <ContactCta />
-      <BlogSmall />
-      <GetInTouch />
-      <FAQ />
+
+      {/* УСЛОВИЯ АРЕНДЫ */}
+      <section id="terms">
+        <BlogSmall />
+      </section>
+
+      {/* КОНТАКТЫ */}
+      <section id="contact">
+        <GetInTouch />
+      </section>
+      
+
+      {/* FAQ (опционально) */}
+      <section id="faqs">
+        <FAQ />
+      </section>
     </main>
   )
 }
