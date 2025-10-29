@@ -35,9 +35,7 @@ export default function Home() {
         <BlogSmall />
       </section>
 
-      <ContactCta />   {/* тут уже id="contact" */}
       <GetInTouch />  {/* без id, как сейчас */}
-
 
       {/* FAQ (опционально) */}
       <section id="faqs">

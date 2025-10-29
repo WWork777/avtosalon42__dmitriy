@@ -17,7 +17,7 @@ const anchorLinks: Anchor[] = [
   { href: '#contact', label: 'Контакты' },
 ];
 
-const HEADER_OFFSET = 84; // поправка под высоту шапки при скролле
+const HEADER_OFFSET = 80; // поправка под высоту шапки при скролле
 
 const Header: React.FC = () => {
   const [sticky, setSticky] = useState(false);
@@ -76,12 +76,10 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`fixed h-24 py-1 z-50 w-full bg-transparent transition-all duration-300 lg:px-0 px-4 ${sticky ? 'top-3' : 'top-0'
-        }`}
+      className={`fixed h-20 py-1 z-50 w-full bg-transparent transition-all duration-300 lg:px-0 px-4 ${sticky ? 'top-3' : 'top-0'}`}
     >
       <nav
-        className={`container mx-auto max-w-8xl relative flex items-center justify-between py-4 duration-300 ${sticky ? 'shadow-lg bg-white dark:bg-dark rounded-full top-5 px-4' : 'shadow-none top-0'
-          }`}
+        className={`container mx-auto max-w-8xl relative flex items-center justify-between py-3 duration-300 ${sticky ? 'shadow-lg bg-white dark:bg-dark rounded-full top-5 px-4' : 'shadow-none top-0'}`}
       >
         {/* ЛОГО (один контейнер, две версии поверх друг друга) */}
         <Link href="/" aria-label="На главную"

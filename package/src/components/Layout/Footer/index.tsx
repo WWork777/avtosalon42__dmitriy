@@ -76,7 +76,7 @@ const Footer = () => {
         {/* Низ: копирайт и служебные ссылки (лаконично) */}
         <div className="flex items-center justify-between flex-wrap gap-4 py-6">
           <p className="text-white/40 text-sm">
-            © {new Date().getFullYear()} Homely. Все права защищены.
+            © {new Date().getFullYear()} Все права защищены.
           </p>
           <div className="flex items-center gap-6">
             <Link href="#terms" className="text-white/40 hover:text-white text-sm">
