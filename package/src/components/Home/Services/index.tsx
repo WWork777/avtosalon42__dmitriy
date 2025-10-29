@@ -116,7 +116,7 @@ const Categories: React.FC = () => {
             <div className="relative rounded-2xl overflow-hidden group">
               <div className="relative w-full h-[200px] sm:h-[260px] md:h-[320px] lg:h-[386px]">
                 <Image
-                  src="/images/hero/facad.JPG"
+                  src="/images/hero/facad.jpg"
                   alt="Фасад и территория"
                   fill
                   className="object-cover"
